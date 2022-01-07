@@ -1,0 +1,82 @@
+.modal-content {
+  overflow: hidden;
+  background-color: white;
+
+
+  .modal-title {
+    padding: .5em;
+    background: purple;
+    margin: 0 !important;
+    color: #fff;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 600;
+  }
+
+  .modal-body {
+    background-color: white;
+    padding: .5em 1em !important;
+
+    .form-group {
+      position: relative;
+    }
+
+    .card-logo {
+      position: absolute;
+      top: 2.2em;
+      right: .5em;
+
+      img {
+        height: 3em;
+
+      }
+    }
+
+    .slash-seperator {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+    }
+
+  }
+
+  .modal-footer {
+    border-top: 1px solid rgb(201, 192, 192);
+    text-align: end;
+    padding: 1em 0
+  }
+
+  .confirm-button {
+    border-radius: 5px;
+    background-color: purple;
+    border: 2px solid purple;
+    color: white;
+    padding: 0 3em;
+    transition: all 1s;
+
+  }
+
+  .close-button {
+    border-radius: 5px;
+    background-color: white;
+    border: 2px solid purple;
+    color: purple;
+    padding: 0 3em;
+    transition: all 1s;
+  }
+
+ 
+
+  .confirm-button:disabled {
+      opacity: .5;
+  }
+
+  .remove-card {
+    text-align: center;
+
+    img {
+      height: 20vh;
+    }
+  }
+
+}

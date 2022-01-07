@@ -1,0 +1,77 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <mat-card-title>My Wallet Details</mat-card-title> 
+ 
+    <mat-card class="card-background">
+    
+      <div class="row" *ngFor="let card of cards">
+        <div class="col-12 col-xl-5 col-lg-5 col-md-5">
+
+          <mat-card class="card-detail">
+            <div class="row">
+              <div class="col-7 col-xl-9 col-lg-9 col-md-9">
+                <h5> Card Number</h5>
+                <h3>  {{maskData(card.cardNumber)}}</h3>
+                <h5>   Expiry Date: {{card.expMonth}} - {{card.expYear}} <span> | </span> <span >  CVV : *** <mat-icon>eye</mat-icon> </span> </h5>
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3" *ngIf="card.cardNumber.startsWith('4')">
+                <img src="assets/visa.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3"
+                *ngIf="card.cardNumber.startsWith('5018') || card.cardNumber.startsWith('502') || card.cardNumber.startsWith('503') || card.cardNumber.startsWith('506') || card.cardNumber.startsWith('56') || card.cardNumber.startsWith('58') || card.cardNumber.startsWith('639') || card.cardNumber.startsWith('6220') || card.cardNumber.startsWith('67')">
+                <img src="assets/maestro.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3" *ngIf="card.cardNumber.startsWith('37') || card.cardNumber.startsWith('34')">
+                <img src="assets/amex.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3" *ngIf="card.cardNumber.startsWith('600')">
+                <img src="assets/Forbrugsforeningen.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3" *ngIf="card.cardNumber.startsWith('519')">
+                <img src="assets/dk.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3"
+                *ngIf="card.cardNumber.startsWith('51') || card.cardNumber.startsWith('52') || card.cardNumber.startsWith('53')  || card.cardNumber.startsWith('54')  || card.cardNumber.startsWith('55') || card.cardNumber.startsWith('22')  || card.cardNumber.startsWith('23')  || card.cardNumber.startsWith('24') || card.cardNumber.startsWith('25')  || card.cardNumber.startsWith('26') || card.cardNumber.startsWith('27')  ">
+                <img src="assets/mastercard.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3"
+                *ngIf="card.cardNumber.startsWith('30') || card.cardNumber.startsWith('36') || card.cardNumber.startsWith('38') || card.cardNumber.startsWith('39')">
+                <img src="assets/diners_club.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3"
+                *ngIf="card.cardNumber.startsWith('60') || card.cardNumber.startsWith('64') || card.cardNumber.startsWith('65') || card.cardNumber.startsWith('622')">
+                <img src="assets/discover.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3" *ngIf="card.cardNumber.startsWith('62') || card.cardNumber.startsWith('88')">
+                <img src="assets/unionpay.png">
+              </div>
+              <div class="col-5 col-xl-3 col-lg-3 col-md-3" *ngIf="card.cardNumber.startsWith('35') ">
+                <img src="assets/JCB-Logo.png">
+              </div>
+            </div>
+
+          </mat-card>
+        </div>
+        <div class="col-12 col-xl-2 col-lg-2 col-md-2 second-part"> <button mat-mini-fab (click)="actionDialog(card)" title="Remove Card">
+            <mat-icon>delete</mat-icon>
+          </button></div>
+          
+         
+      </div>
+      <div class="row cards-not-found" *ngIf="!cards || cards.length == 0">
+        <div class="col-12">
+          <mat-icon>info</mat-icon>
+        </div>
+        <div class="col-12">
+          <h2>No Cards Available</h2>
+        </div>
+
+      </div>
+
+    </mat-card>
+  </div>
+  <div class="footer-button">
+    <button mat-raised-button class="add-card" (click)="actionDialog('ADD')"> <mat-icon>add</mat-icon> Add Card</button>
+
+  </div>
+</div>

@@ -1,0 +1,160 @@
+<div class="modal-content">
+  <h3 class="modal-title" *ngIf="data.text === 'ADD'">Add Card</h3>
+  <h3 class="modal-title" *ngIf="data.text !== 'ADD'">Remove Card</h3>
+  <div class="modal-body ">
+    <div class="row">
+      <div class="col-md-12 " *ngIf="data.text === 'ADD'">
+        <form [formGroup]="cardDetailsForm" (ngSubmit)="onSubmit(cardDetailsForm.value, types)" novalidate
+          style="max-width: 500px; margin: 0 auto; padding-top: 20px;">
+
+          <div class="form-group">
+            <label for="cc-number" class="control-label">Card number
+            </label>
+            <small class="text-muted" *ngIf="types | async as type"> <span class="cc-brand"> {{type}} </span></small>
+            <input id="cc-number" (change)="checkCard($event)" formControlName="creditCard" type="tel"
+              class="input-lg form-control cc-number" autocomplete="cc-number" placeholder="•••• •••• •••• ••••"
+              ccNumber [ngClass]="{ 'is-invalid': validateCard &&  cardDetails.creditCard.errors }">
+
+            <div class="card-logo">
+              <small class="text-muted" *ngIf="types | async as type"> 
+                <span class="cc-brand" *ngIf="type === 'maestro'"> <img src="assets/Maestro.png"></span>
+                <span class="cc-brand" *ngIf="type === 'amex'"> <img src="assets/amex.png"></span>
+                <span class="cc-brand" *ngIf="type === 'forbrugsforeningen'"> <img src="assets/Forbrugsforeningen.png"></span>
+                <span class="cc-brand" *ngIf="type === 'dankort'"> <img src="assets/dk.png"></span>
+                <span class="cc-brand" *ngIf="type === 'visa'"> <img src="assets/visa.png"></span>
+                <span class="cc-brand" *ngIf="type === 'mastercard'"> <img src="assets/mastercard.png"></span>
+                <span class="cc-brand" *ngIf="type === 'dinersclub'"> <img src="assets/diners_club.png"></span>
+                <span class="cc-brand" *ngIf="type === 'discover'"> <img src="assets/discover.png"></span>
+                <span class="cc-brand" *ngIf="type === 'unionpay'"> <img src="assets/unionpay.png"></span>
+                <span class="cc-brand" *ngIf="type === 'jcb'"> <img src="assets/JCB-Logo.png"></span>
+              </small>
+
+            </div>
+            <div *ngIf=" validateCard && cardDetails.creditCard.errors" class="invalid-feedback">
+              <div *ngIf="cardDetails.creditCard.errors.required">Please Enter Credit Card</div>
+              <div *ngIf="cardDetailsForm.controls.creditCard.invalid && !cardDetails.creditCard.errors.required ">Card
+                Number is invalid</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-8">
+                <label for="cc-exp" class="control-label">Card expiry </label>
+                <div class="row">
+                  <div class="col-5">
+                    <select id="cc-exp" maxlength="2" formControlName="expMonth" type="tel"
+                      class="input-lg form-control cc-exp" autocomplete="cc-exp" placeholder="MM" ccExp
+                      [ngClass]="{ 'is-invalid': submitted && cardDetails.expMonth.errors }">
+                      <option selected disabled value="">MM</option>
+                      <option *ngFor="let month of months" value="{{month.month}}">{{month.month}}</option>
+
+                      <div *ngIf="submitted && cardDetails.expMonth.errors" class="invalid-feedback">
+                        <div *ngIf="cardDetails.expMonth.errors.required">Please Select Month</div>
+
+
+                      </div>
+                    </select>
+                  </div> <span class="slash-seperator"> / </span>
+                  <div class="col-6">
+                    <select id="cc-exp" maxlength="4" (input)="goToNextField('expYear', cvcInput)"
+                      formControlName="expYear" type="tel" class="input-lg form-control cc-exp" autocomplete="cc-exp"
+                      placeholder="YYYY" ccExp [ngClass]="{ 'is-invalid': submitted && cardDetails.expYear.errors }">
+                      <option selected disabled value="">YYYY</option>
+                      <option *ngFor="let year of years" value="{{year.year}}">{{year.year}}</option>
+
+                    </select>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="col-4 ">
+
+                <label for="cc-cvv" class="control-label">Card CVV </label>
+                <input id="cc-cvv" maxlength="4" minlength="3" #cvcInput formControlName="cvv" type="password"
+                  class="input-lg form-control cc-cvc" autocomplete="off" placeholder="•••" required ccCVC
+                  [ngClass]="{ 'is-invalid': submitted && cardDetails.cvv.errors }">
+                  <div *ngIf="submitted && cardDetails.cvv.errors" class="invalid-feedback">
+                    <div *ngIf="cardDetails.cvv.errors.required">CVV is required</div>
+                    <div *ngIf="cardDetails.cvv.errors.pattern">CVV is Invalid</div>
+
+
+                  </div>
+              </div>
+            </div>
+
+
+
+          </div>
+
+          <div class="form-group">
+
+          </div>
+
+          <div class="modal-footer text-center">
+            <button mat-raised-button type="submit" class="confirm-button" [disabled]="cardDetailsForm.invalid"> <span>
+                Add Card</span>
+              <i class="fas fa-spin fa-spinner" *ngIf="spinner"></i>
+            </button>
+            <button mat-raised-button type="button" class="close-button" (click)="onNoClick()"
+              style="margin-left: 1em;">Close</button>
+          </div>
+        </form>
+
+
+      </div>
+
+      <div class="col-12" *ngIf="data.text !== 'ADD'">
+        <div class="row remove-card">
+          <div class="col-12">
+            <h2> Are you sure you want to <b> Remove </b> this card?</h2>
+            <h2>   <b> {{data.text.cardNumber}} </b></h2>
+          </div>
+          <div class="col-12" *ngIf="data.text.cardNumber.startsWith('4')">
+            <img src="assets/visa.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('5018') || data.text.cardNumber.startsWith('502') || data.text.cardNumber.startsWith('503') || data.text.cardNumber.startsWith('506') || data.text.cardNumber.startsWith('56') || data.text.cardNumber.startsWith('58') || data.text.cardNumber.startsWith('639') || data.text.cardNumber.startsWith('6220') || data.text.cardNumber.startsWith('67')">
+            <img src="assets/maestro.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('37') || data.text.cardNumber.startsWith('34')">
+            <img src="assets/amex.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('600')">
+            <img src="assets/Forbrugsforeningen.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('519')">
+            <img src="assets/dk.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('51') || data.text.cardNumber.startsWith('52') || data.text.cardNumber.startsWith('53')  || data.text.cardNumber.startsWith('54')  || data.text.cardNumber.startsWith('55') || data.text.cardNumber.startsWith('22')  || data.text.cardNumber.startsWith('23')  || data.text.cardNumber.startsWith('24') || data.text.cardNumber.startsWith('25')  || data.text.cardNumber.startsWith('26') || data.text.cardNumber.startsWith('27')  ">
+            <img src="assets/mastercard.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('30') || data.text.cardNumber.startsWith('36') || data.text.cardNumber.startsWith('38') || data.text.cardNumber.startsWith('39')">
+            <img src="assets/diners_club.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('60') || data.text.cardNumber.startsWith('64') || data.text.cardNumber.startsWith('65') || data.text.cardNumber.startsWith('622')">
+            <img src="assets/discover.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('62') || data.text.cardNumber.startsWith('88')">
+            <img src="assets/unionpay.png">
+        </div>
+        <div class="col-12" *ngIf="data.text.cardNumber.startsWith('35') ">
+            <img src="assets/JCB-Logo.png">
+        </div>
+        </div>
+
+      
+        <div class="modal-footer text-center">
+          <button mat-raised-button type="button" class="confirm-button" (click)="deleteCard(data.text)"> <span>
+              Remove Card</span>
+            <i class="fas fa-spin fa-spinner" *ngIf="spinner"></i>
+          </button>
+          <button mat-raised-button type="button" class="close-button" (click)="onNoClick()"
+            style="margin-left: 1em;">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
